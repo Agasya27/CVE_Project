@@ -1,0 +1,26 @@
+# Virtual environment
+venv/
+.venv/
+
+# Model artifacts (too large for GitHub — retrain via notebooks)
+models/bert_classifier/
+models/*.joblib
+models/*.npy
+models/*.npz
+models/*.png
+
+# Byte-compiled / optimized
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
