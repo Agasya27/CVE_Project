@@ -194,17 +194,11 @@ st.markdown("""
     }
     .sim-card .sim-desc { font-size: 0.85rem; color: #555; line-height: 1.55; }
 
-    /* ── Sidebar styling ────────────────────────────────── */
+    /* ── Sidebar styling (light mode) ─────────────────── */
     section[data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+        background: linear-gradient(180deg, #f0f0f8 0%, #e8eaf6 100%);
     }
-    section[data-testid="stSidebar"] * {
-        color: #e0e0e0 !important;
-    }
-    section[data-testid="stSidebar"] .stRadio label:hover {
-        color: #ffffff !important;
-    }
-    section[data-testid="stSidebar"] hr { border-color: rgba(255,255,255,0.12); }
+    section[data-testid="stSidebar"] hr { border-color: rgba(0,0,0,0.08); }
 
     /* ── Model status dots ──────────────────────────────── */
     .status-row { display: flex; align-items: center; gap: 0.45rem; margin: 0.25rem 0; font-size: 0.82rem; }
@@ -213,6 +207,7 @@ st.markdown("""
     }
     .status-dot.green  { background: #4caf50; box-shadow: 0 0 6px #4caf50; }
     .status-dot.red    { background: #ef5350; }
+    .status-row { color: #333 !important; }
 
     /* ── Streamlit overrides ────────────────────────────── */
     div[data-testid="stMetric"] {
@@ -249,15 +244,29 @@ st.markdown("""
 
 # ─── Model Loading (cached) ──────────────────────────────────────────────────
 
-MODELS_DIR = PROJECT_ROOT / "models"
-DATA_DIR = PROJECT_ROOT / "data"
+MODELS_DIR = (PROJECT_ROOT / "models").resolve()
+DATA_DIR = (PROJECT_ROOT / "data").resolve()
+
+
+def _bert_available():
+    return (MODELS_DIR / "bert_classifier" / "model.safetensors").is_file()
+
+def _severity_available():
+    return (MODELS_DIR / "severity_predictor.joblib").is_file()
+
+def _tfidf_available():
+    return (MODELS_DIR / "tfidf_vectorizer.joblib").is_file()
+
+def _embeddings_available():
+    return (MODELS_DIR / "cve_embeddings.npy").is_file()
 
 
 @st.cache_resource
 def load_bert_classifier():
     """Load the BERT vulnerability classifier."""
     model_path = MODELS_DIR / "bert_classifier"
-    if not model_path.exists():
+    le_path = MODELS_DIR / "label_encoder.joblib"
+    if not model_path.is_dir() or not le_path.is_file():
         return None, None, None
 
     from transformers import DistilBertTokenizer, DistilBertForSequenceClassification
@@ -266,22 +275,23 @@ def load_bert_classifier():
     tokenizer = DistilBertTokenizer.from_pretrained(str(model_path))
     model = DistilBertForSequenceClassification.from_pretrained(str(model_path))
     model.eval()
-    label_encoder = joblib.load(MODELS_DIR / "label_encoder.joblib")
+    label_encoder = joblib.load(le_path)
     return model, tokenizer, label_encoder
 
 
 @st.cache_resource
 def load_severity_predictor():
     """Load the severity prediction model."""
-    sev_model_path = MODELS_DIR / "severity_predictor.joblib"
-    if not sev_model_path.exists():
+    paths = [
+        MODELS_DIR / "severity_predictor.joblib",
+        MODELS_DIR / "severity_tfidf.joblib",
+        MODELS_DIR / "severity_encoder.joblib",
+        MODELS_DIR / "severity_vuln_columns.joblib",
+    ]
+    if not all(p.is_file() for p in paths):
         return None, None, None, None
 
-    model = joblib.load(sev_model_path)
-    tfidf = joblib.load(MODELS_DIR / "severity_tfidf.joblib")
-    encoder = joblib.load(MODELS_DIR / "severity_encoder.joblib")
-    vuln_cols = joblib.load(MODELS_DIR / "severity_vuln_columns.joblib")
-    return model, tfidf, encoder, vuln_cols
+    return tuple(joblib.load(p) for p in paths)
 
 
 @st.cache_resource
@@ -310,7 +320,7 @@ def load_sbert():
 def load_embeddings():
     """Load precomputed CVE embeddings."""
     emb_path = MODELS_DIR / "cve_embeddings.npy"
-    if emb_path.exists():
+    if emb_path.is_file():
         return np.load(emb_path)
     return None
 
@@ -319,7 +329,7 @@ def load_embeddings():
 def load_tfidf_vectorizer():
     """Load TF-IDF vectorizer for keyword extraction."""
     tfidf_path = MODELS_DIR / "tfidf_vectorizer.joblib"
-    if tfidf_path.exists():
+    if tfidf_path.is_file():
         return joblib.load(tfidf_path)
     return None
 
@@ -421,6 +431,80 @@ def find_similar_cves(query, embeddings, df, sbert_model, top_n=5):
     return pd.DataFrame(results)
 
 
+# ─── Fallback Helpers (for Streamlit Cloud / no-model deployment) ─────────────
+
+def _rule_based_severity(text):
+    """Estimate severity from keywords when ML model is unavailable."""
+    t = text.lower()
+    critical_kw = ['remote code execution', 'arbitrary code', 'unauthenticated', 'rce', 'root access', 'pre-auth']
+    high_kw = ['privilege escalation', 'authentication bypass', 'command injection', 'sql injection', 'buffer overflow']
+    low_kw = ['low impact', 'minor', 'informational']
+    if any(k in t for k in critical_kw):
+        return 'Critical'
+    if any(k in t for k in high_kw):
+        return 'High'
+    if any(k in t for k in low_kw):
+        return 'Low'
+    return 'Medium'
+
+
+def _extract_keywords_simple(text, n=8):
+    """Extract keywords using basic TF approach when TF-IDF model is unavailable."""
+    import re
+    from collections import Counter
+    stop = {'the','a','an','is','are','was','were','be','been','being','have','has',
+            'had','do','does','did','will','would','could','should','may','might',
+            'shall','can','to','of','in','for','on','with','at','by','from','as',
+            'into','through','during','before','after','above','below','between',
+            'out','off','over','under','again','further','then','once','that','this',
+            'these','those','it','its','and','but','or','nor','not','so','very','also',
+            'just','than','too','only','own','same','no','all','each','every','both',
+            'few','more','most','other','some','such','any','up','about','which','when',
+            'where','who','whom','what','how','if','because','until','while','although',
+            'allows','via','using','allows','used','use','due'}
+    words = re.findall(r'[a-z]{3,}', text.lower())
+    words = [w for w in words if w not in stop]
+    counts = Counter(words)
+    total = max(len(words), 1)
+    return [(w, c / total) for w, c in counts.most_common(n)]
+
+
+def _extractive_summary(text, max_len=200):
+    """Simple extractive summary by picking the most informative sentence."""
+    import re
+    sentences = re.split(r'(?<=[.!?])\s+', text.strip())
+    if not sentences:
+        return text[:max_len]
+    # Pick the longest sentence (usually most informative) up to max_len
+    best = max(sentences, key=len)
+    if len(best) > max_len:
+        best = best[:max_len].rsplit(' ', 1)[0] + '…'
+    return best
+
+
+def _find_similar_tfidf(query, df, top_n=5):
+    """TF-IDF-based similarity search fallback when SBERT is unavailable."""
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.metrics.pairwise import cosine_similarity
+    descriptions = df['Description'].fillna('').tolist()
+    corpus = [query] + descriptions
+    vectorizer = TfidfVectorizer(max_features=5000, stop_words='english')
+    tfidf_matrix = vectorizer.fit_transform(corpus)
+    similarities = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:])[0]
+    top_indices = similarities.argsort()[::-1][:top_n]
+    results = []
+    for idx in top_indices:
+        results.append({
+            'CVE ID': df['CVE ID'].iloc[idx],
+            'Description': df['Description'].iloc[idx][:200] + "...",
+            'CVSS Score': df['CVSS Score'].iloc[idx],
+            'Severity': df['Severity'].iloc[idx] if 'Severity' in df.columns else 'N/A',
+            'Type': df['Vulnerability_Type'].iloc[idx] if 'Vulnerability_Type' in df.columns else 'N/A',
+            'Similarity': f"{similarities[idx]:.4f}"
+        })
+    return pd.DataFrame(results)
+
+
 # ─── Sidebar ──────────────────────────────────────────────────────────────────
 
 st.sidebar.markdown("## 🛡️ CVE Intel Analyzer")
@@ -437,10 +521,10 @@ page = st.sidebar.radio("Navigate", [
 st.sidebar.markdown("---")
 st.sidebar.markdown("#### Model Status")
 
-_bert_ready = (MODELS_DIR / "bert_classifier").exists()
-_sev_ready = (MODELS_DIR / "severity_predictor.joblib").exists()
-_tfidf_ready = (MODELS_DIR / "tfidf_vectorizer.joblib").exists()
-_emb_ready = (MODELS_DIR / "cve_embeddings.npy").exists()
+_bert_ready = _bert_available()
+_sev_ready = _severity_available()
+_tfidf_ready = _tfidf_available()
+_emb_ready = _embeddings_available()
 
 for name, ready in [
     ("BERT Classifier", _bert_ready),
@@ -449,7 +533,7 @@ for name, ready in [
     ("CVE Embeddings", _emb_ready),
 ]:
     dot_cls = "green" if ready else "red"
-    label = "Loaded" if ready else "Not found"
+    label = "Ready" if ready else "Will use fallback"
     st.sidebar.markdown(
         f'<div class="status-row"><span class="status-dot {dot_cls}"></span>{name} — <em>{label}</em></div>',
         unsafe_allow_html=True,
@@ -530,32 +614,40 @@ if page == "🔍 CVE Analyzer":
                             unsafe_allow_html=True,
                         )
                     else:
-                        severity = "Unknown"
-                        st.info("Severity model not found. Run notebook 06 to train.")
+                        # Fallback: rule-based severity from keywords
+                        severity = _rule_based_severity(cve_text)
+                        sev_class = f"severity-{severity.lower()}"
+                        st.markdown(
+                            f'<div class="glass-card">'
+                            f'<span class="severity-badge {sev_class}">{severity}</span>'
+                            f'<div style="margin-top:0.4rem;font-size:0.85rem;color:#999">Rule-based estimate</div>'
+                            f'</div>',
+                            unsafe_allow_html=True,
+                        )
 
                 # ── Keywords ───────────────────────────────────────────
                 st.markdown('<div class="section-title">🔑 Extracted Keywords</div>', unsafe_allow_html=True)
                 tfidf_vec = load_tfidf_vectorizer()
                 if tfidf_vec is not None:
                     keywords = extract_keywords_tfidf(cve_text, tfidf_vec)
-                    if keywords:
-                        chips_html = "".join(
-                            f'<span class="chip">{kw} ({score:.2f})</span>' for kw, score in keywords[:10]
-                        )
-                        st.markdown(f'<div class="chip-container">{chips_html}</div>', unsafe_allow_html=True)
-                    else:
-                        st.info("No significant keywords extracted.")
                 else:
-                    st.info("TF-IDF model not found — run notebook 03.")
+                    keywords = _extract_keywords_simple(cve_text)
+                if keywords:
+                    chips_html = "".join(
+                        f'<span class="chip">{kw} ({score:.2f})</span>' for kw, score in keywords[:10]
+                    )
+                    st.markdown(f'<div class="chip-container">{chips_html}</div>', unsafe_allow_html=True)
+                else:
+                    st.info("No significant keywords extracted.")
 
                 # ── Generated Alert ────────────────────────────────────
                 st.markdown('<div class="section-title">📋 Security Alert</div>', unsafe_allow_html=True)
                 summarizer = load_summarizer()
-                severity_display = severity if sev_model else "Unknown"
+                severity_display = severity
                 if summarizer is not None:
                     summary = summarize_text(cve_text, summarizer)
                 else:
-                    summary = cve_text[:150] + "..."
+                    summary = _extractive_summary(cve_text)
 
                 alert = generate_alert(cve_text, vuln_type, severity_display, summary)
                 st.markdown(
@@ -707,41 +799,46 @@ elif page == "🔎 Similar CVE Search":
             sbert_model = load_sbert()
             embeddings = load_embeddings()
 
-            if sbert_model is None:
-                st.error("Sentence-BERT model could not be loaded. Ensure sentence-transformers is installed.")
-            elif embeddings is None:
-                st.warning("Precomputed embeddings not found. Computing on-the-fly…")
-                with st.spinner("Generating embeddings…"):
-                    descriptions = df['Description'].fillna('').tolist()
-                    embeddings = sbert_model.encode(descriptions, show_progress_bar=False, batch_size=32)
+            # Try SBERT first, fall back to TF-IDF similarity
+            use_tfidf_fallback = False
+            if sbert_model is not None:
+                if embeddings is None:
+                    with st.spinner("Generating embeddings on-the-fly…"):
+                        descriptions = df['Description'].fillna('').tolist()
+                        embeddings = sbert_model.encode(descriptions, show_progress_bar=False, batch_size=32)
+            else:
+                use_tfidf_fallback = True
 
-            if sbert_model is not None and embeddings is not None:
+            if not use_tfidf_fallback and sbert_model is not None and embeddings is not None:
                 with st.spinner("Searching…"):
                     results = find_similar_cves(query, embeddings, df, sbert_model, top_n=num_results)
+            else:
+                with st.spinner("Searching (TF-IDF similarity)…"):
+                    results = _find_similar_tfidf(query, df, top_n=num_results)
 
-                st.markdown(f'<div class="section-title">Top {len(results)} Matches</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="section-title">Top {len(results)} Matches</div>', unsafe_allow_html=True)
 
-                for _, row in results.iterrows():
-                    severity = row.get('Severity', 'N/A')
-                    sev_cls = f"severity-{severity.lower()}" if severity in ('Critical','High','Medium','Low') else ""
-                    sev_badge = f'<span class="sim-tag {sev_cls}" style="margin-right:2px">{severity}</span>'
-                    type_badge = (
-                        f'<span class="sim-tag" style="background:#e8eaf6;color:#302b63">{row["Type"]}</span>'
-                    )
-                    cvss_badge = (
-                        f'<span class="sim-tag" style="background:#fff3e0;color:#e65100">CVSS {row["CVSS Score"]}</span>'
-                    )
+            for _, row in results.iterrows():
+                severity = row.get('Severity', 'N/A')
+                sev_cls = f"severity-{severity.lower()}" if severity in ('Critical','High','Medium','Low') else ""
+                sev_badge = f'<span class="sim-tag {sev_cls}" style="margin-right:2px">{severity}</span>'
+                type_badge = (
+                    f'<span class="sim-tag" style="background:#e8eaf6;color:#302b63">{row["Type"]}</span>'
+                )
+                cvss_badge = (
+                    f'<span class="sim-tag" style="background:#fff3e0;color:#e65100">CVSS {row["CVSS Score"]}</span>'
+                )
 
-                    st.markdown(
-                        f'<div class="sim-card">'
-                        f'  <div class="sim-header">'
-                        f'    <span class="sim-cve">{row["CVE ID"]}</span>'
-                        f'    <span class="sim-score">Similarity {row["Similarity"]}</span>'
-                        f'  </div>'
-                        f'  <div class="sim-tags">{sev_badge}{type_badge}{cvss_badge}</div>'
-                        f'  <div class="sim-desc">{row["Description"]}</div>'
-                        f'</div>',
-                        unsafe_allow_html=True,
-                    )
+                st.markdown(
+                    f'<div class="sim-card">'
+                    f'  <div class="sim-header">'
+                    f'    <span class="sim-cve">{row["CVE ID"]}</span>'
+                    f'    <span class="sim-score">Similarity {row["Similarity"]}</span>'
+                    f'  </div>'
+                    f'  <div class="sim-tags">{sev_badge}{type_badge}{cvss_badge}</div>'
+                    f'  <div class="sim-desc">{row["Description"]}</div>'
+                    f'</div>',
+                    unsafe_allow_html=True,
+                )
 
 # ─── Footer ──────────────────────────────────────────────────────────────────
