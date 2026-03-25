@@ -41,12 +41,53 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-    /* ── Global ─────────────────────────────────────────── */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-    html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
+    /* Targets all background layers including the white header strip */
+    .stApp, [data-testid="stAppViewContainer"], [data-testid="stMain"], .main, [data-testid="stHeader"] {
+        background-color: #F7F6FF !important;
+    }
+
+    /* Removes the white background from the content block specifically */
+    [data-testid="stAppViewBlockContainer"] {
+        background-color: #F7F6FF !important;
+        padding-top: 2rem !important; /* Adjusts top spacing */
+    }
+
+    html, body { 
+        font-family: 'Inter', sans-serif;
+        background-color: #F7F6FF !important; 
+    }
+
+         
 
     .block-container { padding-top: 1rem; padding-bottom: 2rem; max-width: 1200px; }
+            
+
+    /* ── 4. Black Border Chart Cards (Replacement) ── */
+    /* This targets the internal Streamlit block that holds your chart */
+    [data-testid="stVerticalBlock"] > div:has(div.stPlotlyChart) {
+        background-color: #ffffff !important;
+        border: 2px solid #000000 !important; /* Pure Black Border */
+        border-radius: 12px !important;
+        padding: 20px !important;
+        margin-bottom: 25px !important;
+        box-shadow: 4px 4px 0px rgba(0,0,0,0.05) !important;
+    }
+
+    /* Styles the title inside the black-bordered box */
+    [data-testid="stVerticalBlock"] > div:has(div.stPlotlyChart) .section-title {
+        margin-top: 0 !important;
+        color: #000000 !important;
+        border-bottom: 1px solid #f0f0f0;
+        padding-bottom: 8px;
+        margin-bottom: 15px !important;
+    }
+
+
+
+
+    
 
     /* ── Hero header ────────────────────────────────────── */
     .main-header {
@@ -225,20 +266,46 @@ st.markdown("""
         border-color: #667eea !important;
         box-shadow: 0 0 0 3px rgba(102,126,234,0.15) !important;
     }
-    button[kind="primary"] {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+
+    /* ── The Nuclear Neon Button Fix ── */
+    body .stApp div.stButton > button[kind="primary"] {
+        background: linear-gradient(135deg, #26de81 0%, #20bf6b 100%) !important;
+        background-color: #26de81 !important;
+        color: white !important;
         border: none !important;
         border-radius: 10px !important;
-        font-weight: 600 !important;
-        letter-spacing: 0.3px;
-        box-shadow: 0 4px 16px rgba(102,126,234,0.3) !important;
-        transition: transform 0.12s, box-shadow 0.12s !important;
+        font-weight: 700 !important;
+        height: 3rem !important;
+        box-shadow: 0 4px 15px rgba(38, 222, 129, 0.4) !important;
+        text-transform: uppercase !important;
+        opacity: 1 !important;
+        visibility: visible !important;
     }
-    button[kind="primary"]:hover {
+
+    /* Hover State Force */
+    body .stApp div.stButton > button[kind="primary"]:hover {
+        background: linear-gradient(135deg, #2ae386 0%, #25c975 100%) !important;
+        box-shadow: 0 6px 20px rgba(38, 222, 129, 0.6) !important;
         transform: translateY(-1px) !important;
-        box-shadow: 0 6px 24px rgba(102,126,234,0.4) !important;
     }
-    div.stSpinner > div { color: #667eea !important; }
+
+
+
+      
+
+    
+    /* ── Footer Styling ── */
+    .app-footer {
+        text-align: center; /* This centers the text */
+        margin-top: 3rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e0e0e0;
+        color: #666;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        width: 100%; /* Ensures it spans the full width to allow centering */
+    }     
+    
 </style>
 """, unsafe_allow_html=True)
 
@@ -550,14 +617,14 @@ df = load_dataset()
 if page == "🔍 CVE Analyzer":
     st.markdown(
         '<div class="main-header">'
-        '<h1>🛡️ CVE Intelligence Analyzer</h1>'
+        '<h1>🛡️ CVE Insight: NLP-Powered Short Alerts for Vulnerability Management</h1>'
         '<p>Paste a vulnerability description to get instant classification, severity, keywords &amp; an actionable alert.</p>'
         '</div>',
         unsafe_allow_html=True,
     )
 
     # Input
-    st.markdown('<div class="section-title">📝 Input CVE Description</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title"> Input CVE Description</div>', unsafe_allow_html=True)
     default_text = (
         "A buffer overflow vulnerability exists in Apache HTTP Server 2.4.58 "
         "that allows remote attackers to execute arbitrary code via crafted HTTP requests."
@@ -692,10 +759,11 @@ elif page == "📊 Vulnerability Trends":
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
             font=dict(family='Inter, sans-serif'),
-            margin=dict(l=40, r=20, t=45, b=40),
+            margin=dict(l=20, r=10, t=20, b=20),
         )
 
         with chart_col1:
+           
             st.markdown('<div class="section-title">Severity Breakdown</div>', unsafe_allow_html=True)
             if 'Severity' in df.columns:
                 sev_counts = df['Severity'].value_counts()
@@ -707,23 +775,27 @@ elif page == "📊 Vulnerability Trends":
                            color=sev_counts.index, color_discrete_map=color_map,
                            hole=0.45)
                 fig.update_traces(textinfo='percent+label', textfont_size=12)
-                fig.update_layout(height=380, showlegend=False, **_chart_template)
+                fig.update_layout(height=450, showlegend=False, **_chart_template)
                 st.plotly_chart(fig, use_container_width=True)
+            st.markdown('</div>', unsafe_allow_html=True)
 
         with chart_col2:
+           
             st.markdown('<div class="section-title">CVEs by Year</div>', unsafe_allow_html=True)
             if 'CVE_Year' in df.columns:
                 year_counts = df['CVE_Year'].dropna().value_counts().sort_index()
                 fig = px.bar(x=year_counts.index.astype(int), y=year_counts.values,
                            labels={'x': 'Year', 'y': 'Count'},
                            color=year_counts.values,
-                           color_continuous_scale=[[0, '#c5cae9'], [1, '#302b63']])
-                fig.update_layout(height=380, showlegend=False,
+                           color_continuous_scale=[[0, "#bdc4f4"], [1, "#100d2f"]])
+                fig.update_layout(height=450, showlegend=False,
                                   coloraxis_showscale=False, **_chart_template)
                 fig.update_traces(marker_line_width=0, marker_cornerradius=6)
                 st.plotly_chart(fig, use_container_width=True)
+            st.markdown('</div>', unsafe_allow_html=True)
 
         # Row 2: Vulnerability types
+       
         st.markdown('<div class="section-title">Vulnerability Types</div>', unsafe_allow_html=True)
         if 'Vulnerability_Type' in df.columns:
             vuln_counts = df['Vulnerability_Type'].value_counts()
@@ -732,14 +804,16 @@ elif page == "📊 Vulnerability Trends":
                         color=vuln_counts.values,
                         color_continuous_scale=[[0, '#e8eaf6'], [1, '#302b63']],
                         orientation='h')
-            fig.update_layout(height=420, showlegend=False,
+            fig.update_layout(height=400, showlegend=False,
                               coloraxis_showscale=False,
                               yaxis=dict(autorange='reversed'),
                               **_chart_template)
             fig.update_traces(marker_line_width=0, marker_cornerradius=5)
             st.plotly_chart(fig, use_container_width=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
         # Row 3: Most affected platforms
+        
         st.markdown('<div class="section-title">Most Affected Vendors / Platforms</div>', unsafe_allow_html=True)
         if 'Affected OS' in df.columns:
             from collections import Counter
@@ -756,20 +830,21 @@ elif page == "📊 Vulnerability Trends":
                            y=[v[1] for v in vendor_counts],
                            labels={'x': 'Vendor', 'y': 'Count'},
                            color=[v[1] for v in vendor_counts],
-                           color_continuous_scale=[[0, '#bbdefb'], [1, '#1565c0']])
+                           color_continuous_scale=[[0, "#b1a5ed"], [1, "#2A144A"]])
                 fig.update_layout(xaxis_tickangle=-45, height=380, showlegend=False,
                                   coloraxis_showscale=False, **_chart_template)
                 fig.update_traces(marker_line_width=0, marker_cornerradius=5)
                 st.plotly_chart(fig, use_container_width=True)
-
+        st.markdown('</div>', unsafe_allow_html=True)
         # CVSS Score distribution
+       
         st.markdown('<div class="section-title">CVSS Score Distribution</div>', unsafe_allow_html=True)
         fig = px.histogram(df, x='CVSS Score', nbins=25,
-                         color_discrete_sequence=['#667eea'])
-        fig.update_layout(height=340, bargap=0.06, **_chart_template)
+                         color_discrete_sequence=["#6A378E"])
+        fig.update_layout(height=300, bargap=0.06, **_chart_template)
         fig.update_traces(marker_line_width=0, marker_cornerradius=4)
         st.plotly_chart(fig, use_container_width=True)
-
+    st.markdown('</div>', unsafe_allow_html=True)
 
 # ─── Page 3: Similar CVE Search ──────────────────────────────────────────────
 
@@ -842,3 +917,8 @@ elif page == "🔎 Similar CVE Search":
                 )
 
 # ─── Footer ──────────────────────────────────────────────────────────────────
+st.markdown('''
+    <div class="app-footer">
+        🛡️ CVE Intelligence Analyzer Dashboard • Built with Streamlit & NLP Tools<br>
+        © 2026  | NLP models may not be 100% accurate. Always verify with official CVE sources. | Data last updated: 2024 </div>
+''', unsafe_allow_html=True)
