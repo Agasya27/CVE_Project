@@ -618,23 +618,39 @@ def _executive_summary(scanned: pd.DataFrame, techs: list, timestamp: str) -> st
 NVD_API_URL = "https://services.nvd.nist.gov/rest/json/cves/2.0"
 
 
+def _get_nvd_api_key() -> str:
+    """
+    Retrieve the NVD API key from Streamlit secrets.
+
+    On Streamlit Cloud set it under Settings → Secrets as::
+
+        NVD_API_KEY = "your-key-here"
+
+    Falls back to an empty string (anonymous, lower rate limit) if not set.
+    """
+    try:
+        return st.secrets["NVD_API_KEY"]
+    except (KeyError, FileNotFoundError):
+        return ""
+
+
 @st.cache_data(ttl=3600, show_spinner=False)
-def _fetch_nvd_keyword(keyword: str, max_results: int, api_key: str) -> pd.DataFrame:
+def _fetch_nvd_keyword(keyword: str, max_results: int) -> pd.DataFrame:
     """
     Query the NVD REST API v2 for CVEs matching *keyword*.
 
-    Results are cached for 1 hour per (keyword, max_results, api_key) combination
+    Results are cached for 1 hour per (keyword, max_results) combination
     so repeated scans of the same stack are instant.
 
     Args:
         keyword:     Technology name to search (e.g. ``'Apache'``).
         max_results: Maximum number of CVEs to retrieve (NVD cap: 2 000).
-        api_key:     Optional NVD API key for higher rate limits.
 
     Returns:
         DataFrame with columns matching the local dataset schema, or an
         empty DataFrame on network / parsing failure.
     """
+    api_key = _get_nvd_api_key()
     headers = {"apiKey": api_key} if api_key.strip() else {}
     params  = {
         "keywordSearch":   keyword,
@@ -698,32 +714,31 @@ def _scan_nvd_stack(
     techs: list,
     max_per_tech: int,
     min_cvss: float,
-    api_key: str,
     status_container,
 ) -> pd.DataFrame:
     """
     Query the NVD API for each technology in *techs* with polite rate limiting.
 
-    Without an API key NVD allows ~5 requests / 30 s, so we wait 6 s between
-    requests.  With an API key the limit is 50 req / 30 s (0.6 s gap).
+    Rate limit is determined automatically from the stored API key:
+    with key → 0.7 s gap, without → 6.2 s gap.
 
     Args:
         techs:            List of technology name strings.
         max_per_tech:     Max CVEs to fetch per technology.
         min_cvss:         Only keep CVEs at or above this score.
-        api_key:          NVD API key (empty string = anonymous).
         status_container: ``st.status`` context used to stream progress messages.
 
     Returns:
         Deduplicated, risk-scored DataFrame sorted by Risk_Score descending.
     """
+    api_key = _get_nvd_api_key()
     delay   = 0.7 if api_key.strip() else 6.2   # NVD rate-limit gap
     frames  = []
     errors  = []
 
     for i, tech in enumerate(techs):
         status_container.write(f"🔍 Fetching CVEs for **{tech}** ({i+1}/{len(techs)})…")
-        result = _fetch_nvd_keyword(tech, max_per_tech, api_key)
+        result = _fetch_nvd_keyword(tech, max_per_tech)
 
         if "_error" in result.columns:
             errors.append(result["_error"].iloc[0])
@@ -1242,33 +1257,25 @@ elif page == "🎯 Attack Surface Scanner":
     live_mode = data_source.startswith("🌐")
 
     if live_mode:
+        _key_active = bool(_get_nvd_api_key().strip())
+        _rate_label = "~0.7 s / request" if _key_active else "~6 s / request (no key)"
+        _key_badge  = "✅ API key active" if _key_active else "⚠️ No API key — slower rate limit"
         st.info(
-            "**Live NVD mode** queries the official National Vulnerability Database "
-            "in real-time. Works for any technology — Kubernetes, Rust crates, cloud "
-            "services, proprietary software — not just what's in the local dataset.\n\n"
-            "Rate limits: **without** an API key ≈ 1 request / 6 s.  "
-            "**With** a free API key: 1 request / 0.7 s. "
-            "Get a key at [nvd.nist.gov/developers/request-an-api-key](https://nvd.nist.gov/developers/request-an-api-key).",
+            f"**Live NVD mode** queries the official National Vulnerability Database "
+            f"in real-time. Works for any technology — Kubernetes, Rust crates, cloud "
+            f"services, proprietary software — not just what's in the local dataset.  \n"
+            f"**{_key_badge}** · Rate: {_rate_label}",
             icon="ℹ️",
         )
-        nvd_col1, nvd_col2 = st.columns([2, 1])
-        with nvd_col1:
-            api_key = st.text_input(
-                "NVD API Key (optional — leave blank for anonymous)",
-                type="password",
-                placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-            )
-        with nvd_col2:
-            max_per_tech = st.slider(
-                "Max CVEs per technology",
-                min_value=10,
-                max_value=200,
-                value=50,
-                step=10,
-                help="NVD returns up to 2,000 per query; keep this low for speed.",
-            )
+        max_per_tech = st.slider(
+            "Max CVEs per technology",
+            min_value=10,
+            max_value=200,
+            value=50,
+            step=10,
+            help="NVD returns up to 2,000 per query; keep this low for speed.",
+        )
     else:
-        api_key      = ""
         max_per_tech = 50
 
     # ── Tech stack input ──────────────────────────────────────────
@@ -1317,15 +1324,16 @@ elif page == "🎯 Attack Surface Scanner":
         else:
             # ── Fetch CVEs ─────────────────────────────────────────
             if live_mode:
-                delay_s = 0.7 if api_key.strip() else 6.2
-                est_s   = len(techs) * delay_s
+                _has_key = bool(_get_nvd_api_key().strip())
+                delay_s  = 0.7 if _has_key else 6.2
+                est_s    = len(techs) * delay_s
                 st.caption(
                     f"Querying NVD for {len(techs)} technologies "
                     f"(estimated {est_s:.0f} s — results cached for 1 h)."
                 )
                 with st.status("Fetching live CVE data from NVD…", expanded=True) as status:
                     scanned = _scan_nvd_stack(
-                        techs, max_per_tech, min_cvss, api_key, status
+                        techs, max_per_tech, min_cvss, status
                     )
                     if scanned.empty:
                         status.update(label="No CVEs found.", state="error")

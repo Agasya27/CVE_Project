@@ -24,3 +24,6 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+
+# Secrets — never commit API keys
+.streamlit/secrets.toml
