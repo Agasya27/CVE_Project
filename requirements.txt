@@ -1,6 +1,10 @@
+# ── PyTorch CPU-only wheel (avoids the ~2.8 GB CUDA build on Streamlit Cloud) ──
+--extra-index-url https://download.pytorch.org/whl/cpu
+
 # ── Core data stack ───────────────────────────────────────────────────────────
 pandas>=2.1.0
 numpy>=1.26.0
+requests>=2.31.0
 
 # ── NLP / ML ──────────────────────────────────────────────────────────────────
 nltk>=3.8.1
