@@ -2,10 +2,6 @@
 venv/
 .venv/
 
-# DistilBERT fine-tuned model — 256 MB, exceeds GitHub 100 MB limit
-# App falls back to zero-shot HuggingFace classification automatically
-models/bert_classifier/
-
 # Large image artefacts
 models/*.png
 
