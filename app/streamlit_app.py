@@ -716,17 +716,20 @@ NVD_API_URL = "https://services.nvd.nist.gov/rest/json/cves/2.0"
 
 def _get_nvd_api_key() -> str:
     """
-    Retrieve the NVD API key from Streamlit secrets.
+    Retrieve the NVD API key.
 
-    On Streamlit Cloud set it under Settings → Secrets as::
-
-        NVD_API_KEY = "your-key-here"
+    Resolution order:
+    1. Environment variable ``NVD_API_KEY`` (Railway, Docker, local export).
+    2. Streamlit secrets (Streamlit Cloud: Settings → Secrets).
 
     Falls back to an empty string (anonymous, lower rate limit) if not set.
     """
+    env_key = os.environ.get("NVD_API_KEY", "").strip()
+    if env_key:
+        return env_key
     try:
-        return st.secrets["NVD_API_KEY"]
-    except (KeyError, FileNotFoundError):
+        return str(st.secrets["NVD_API_KEY"]).strip()
+    except (KeyError, FileNotFoundError, TypeError):
         return ""
 
 
