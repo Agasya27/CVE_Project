@@ -178,7 +178,14 @@ st.markdown("""
 
 def _bert_available() -> bool:
     """Return True if the fine-tuned DistilBERT classifier is present on disk."""
-    return (MODELS_DIR / "bert_classifier" / "model.safetensors").is_file()
+    p = MODELS_DIR / "bert_classifier" / "model.safetensors"
+    if p.is_file() and not _is_git_lfs_pointer(p):
+        return True
+    # If a runtime download URL is configured (e.g. Railway), try to fetch once.
+    if os.environ.get("BERT_MODEL_URL", "").strip():
+        ok, _status = _ensure_bert_weights_present()
+        return ok and p.is_file() and not _is_git_lfs_pointer(p)
+    return False
 
 
 def _severity_model_available() -> bool:
