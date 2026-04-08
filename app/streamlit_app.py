@@ -374,6 +374,7 @@ page = st.sidebar.radio(
         "📊 Vulnerability Dashboard",
         "🔎 Similar CVE Search",
         "🎯 Attack Surface Scanner",
+        "📈 Training Insights",
     ],
     label_visibility="collapsed",
 )
@@ -1502,6 +1503,110 @@ elif page == "🎯 Attack Surface Scanner":
                     mime="text/csv",
                     use_container_width=True,
                 )
+
+elif page == "📈 Training Insights":
+    st.markdown(
+        '<div class="main-header">'
+        "<h1>📈 Training Insights</h1>"
+        "<p>Evaluation metrics computed for this project, with clear definitions of what each score measures.</p>"
+        "</div>",
+        unsafe_allow_html=True,
+    )
+
+    EVAL_DIR = (PROJECT_ROOT / "eval_outputs").resolve()
+    rouge_dir = EVAL_DIR / "rouge_auto"
+    cm_dir = EVAL_DIR / "confusion_matrices"
+
+    st.markdown(
+        '<div class="section-title">ROUGE (Summary Quality)</div>',
+        unsafe_allow_html=True,
+    )
+    st.caption(
+        "ROUGE-1 = unigram overlap (keyword proxy), ROUGE-2 = bigram overlap (phrase proxy), "
+        "ROUGE-L = longest common subsequence (structure/order proxy)."
+    )
+
+    rouge_summary = rouge_dir / "rouge_summary.txt"
+    if rouge_summary.is_file():
+        txt = rouge_summary.read_text(encoding="utf-8", errors="replace")
+        st.info(
+            "**Computed as:** Candidate = `Summary` (from `data/cve_summarized.csv`) "
+            "vs Reference = `Description` (auto proxy, because no human references were provided)."
+        )
+        st.code(txt)
+        per_csv = rouge_dir / "per_sample_rouge.csv"
+        if per_csv.is_file():
+            with open(per_csv, "rb") as f:
+                st.download_button(
+                    "Download per-sample ROUGE CSV",
+                    data=f,
+                    file_name="per_sample_rouge.csv",
+                    mime="text/csv",
+                    use_container_width=True,
+                )
+    else:
+        st.warning(
+            "ROUGE outputs not found. Run `python3 -m eval.compute_rouge ...` first "
+            "to generate `eval_outputs/rouge_auto/rouge_summary.txt`."
+        )
+
+    st.markdown(
+        '<div class="section-title">Confusion Matrices (Model Quality)</div>',
+        unsafe_allow_html=True,
+    )
+    st.info(
+        "**Vulnerability type** confusion matrix is computed as: predicted label vs ground-truth "
+        "`Vulnerability_Type` column.\n\n"
+        "**Severity** confusion matrix is computed as: predicted label vs ground-truth `Severity` "
+        "(derived from `CVSS Score` when present)."
+    )
+
+    # Vulnerability type
+    vt_cm = cm_dir / "vuln_type_confusion_matrix.png"
+    vt_cm_n = cm_dir / "vuln_type_confusion_matrix_normalized.png"
+    vt_rep = cm_dir / "vuln_type_classification_report.txt"
+
+    # Severity
+    sev_cm = cm_dir / "severity_confusion_matrix.png"
+    sev_cm_n = cm_dir / "severity_confusion_matrix_normalized.png"
+    sev_rep = cm_dir / "severity_classification_report.txt"
+
+    if any(p.is_file() for p in [vt_cm, vt_cm_n, sev_cm, sev_cm_n, vt_rep, sev_rep]):
+        c1, c2 = st.columns(2, gap="large")
+        with c1:
+            st.subheader("Vulnerability Type")
+            if vt_cm.is_file():
+                st.image(str(vt_cm), caption="Counts: true vs predicted")
+            if vt_cm_n.is_file():
+                st.image(str(vt_cm_n), caption="Row-normalized: per-true-class distribution")
+            if vt_rep.is_file():
+                st.text("Classification report")
+                st.code(vt_rep.read_text(encoding="utf-8", errors="replace"))
+        with c2:
+            st.subheader("Severity")
+            if sev_cm.is_file():
+                st.image(str(sev_cm), caption="Counts: true vs predicted")
+            if sev_cm_n.is_file():
+                st.image(str(sev_cm_n), caption="Row-normalized: per-true-class distribution")
+            if sev_rep.is_file():
+                st.text("Classification report")
+                st.code(sev_rep.read_text(encoding="utf-8", errors="replace"))
+
+        pred_csv = cm_dir / "predictions.csv"
+        if pred_csv.is_file():
+            with open(pred_csv, "rb") as f:
+                st.download_button(
+                    "Download predictions CSV",
+                    data=f,
+                    file_name="predictions.csv",
+                    mime="text/csv",
+                    use_container_width=True,
+                )
+    else:
+        st.warning(
+            "Confusion matrix outputs not found. Run `python3 -m eval.compute_confusion_matrices` first "
+            "to generate `eval_outputs/confusion_matrices/`."
+        )
 
 
 # ── Footer ────────────────────────────────────────────────────────────────────

@@ -156,6 +156,70 @@ The dashboard has three sections:
 
 ---
 
+## Evaluation (ROUGE + Confusion Matrices)
+
+This repo supports two complementary evaluation types:
+
+- **ROUGE-1/2/L for summaries/keywords** (generation quality)
+- **Confusion matrices for classifiers** (classification quality)
+
+### ROUGE-1/2/L (keyword / phrase / structural accuracy)
+
+ROUGE is only meaningful when you have **human reference text** to compare against. The workflow is:
+
+1) Create a reference-labeling template (stratified sampling recommended):
+
+```bash
+python3 -m eval.make_reference_template --n 200 --stratify --out data/cve_references.csv
+```
+
+2) Fill in `Reference_Summary` (and optionally `Reference_Keywords`) in `data/cve_references.csv`.
+
+3) Compute ROUGE for summaries:
+
+```bash
+python3 -m eval.compute_rouge \
+  --candidates data/cve_summarized.csv \
+  --references data/cve_references.csv \
+  --candidate-col Summary \
+  --reference-col Reference_Summary \
+  --mode summary
+```
+
+Optional: compute ROUGE on keyword lists (treats ROUGE-1 as keyword overlap, ROUGE-2 as phrase overlap):
+
+```bash
+python3 -m eval.compute_rouge \
+  --candidates data/cve_summarized.csv \
+  --references data/cve_references.csv \
+  --candidate-col Top_Keywords \
+  --reference-col Reference_Keywords \
+  --mode keywords
+```
+
+Outputs are written under `eval_outputs/rouge/` (corpus summary + per-sample CSV).
+
+### Confusion matrices (vulnerability type + severity)
+
+Generate confusion matrices and classification reports on a held-out test split:
+
+```bash
+python3 -m eval.compute_confusion_matrices --test-size 0.2 --seed 42
+```
+
+This writes outputs under `eval_outputs/confusion_matrices/`:
+- confusion matrices (counts + normalized)
+- `classification_report` text files
+- `predictions.csv` for error analysis
+
+If you want to evaluate the fine-tuned DistilBERT vulnerability classifier artifacts (when present under `models/bert_classifier/`), enable it explicitly:
+
+```bash
+python3 -m eval.compute_confusion_matrices --enable-bert
+```
+
+---
+
 ## Tech Stack
 
 | Component | Technology |
