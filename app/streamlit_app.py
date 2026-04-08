@@ -17,6 +17,7 @@ import re
 import sys
 import time
 import os
+import hashlib
 import joblib
 import requests
 import numpy as np
@@ -59,6 +60,10 @@ st.set_page_config(
 
 MODELS_DIR = (PROJECT_ROOT / "models").resolve()
 DATA_DIR   = (PROJECT_ROOT / "data").resolve()
+
+_DEFAULT_BERT_MODEL_URL = (
+    "https://github.com/Agasya27/CVE_Project/releases/download/bert-weights/model.safetensors"
+)
 
 # ── Custom CSS ────────────────────────────────────────────────────────────────
 st.markdown("""
@@ -218,6 +223,53 @@ def _is_git_lfs_pointer(path: Path) -> bool:
         return False
 
 
+def _sha256_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def _download_file(url: str, dest: Path, *, timeout_s: int = 60) -> None:
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    tmp = dest.with_suffix(dest.suffix + ".part")
+    if tmp.exists():
+        try:
+            tmp.unlink()
+        except Exception:
+            pass
+    with requests.get(url, stream=True, timeout=timeout_s) as r:
+        r.raise_for_status()
+        with tmp.open("wb") as f:
+            for chunk in r.iter_content(chunk_size=1024 * 1024):
+                if chunk:
+                    f.write(chunk)
+    tmp.replace(dest)
+
+
+def _ensure_bert_weights_present() -> tuple[bool, str]:
+    """
+    Ensure `models/bert_classifier/model.safetensors` exists.
+
+    On Railway `railway up` cannot upload this ~255MB file (413), so we download
+    it at runtime from a GitHub Release asset by default.
+    """
+    safetensors_path = MODELS_DIR / "bert_classifier" / "model.safetensors"
+    if safetensors_path.is_file() and not _is_git_lfs_pointer(safetensors_path):
+        return True, "present"
+
+    url = os.environ.get("BERT_MODEL_URL", "").strip() or _DEFAULT_BERT_MODEL_URL
+    if not url:
+        return False, "missing"
+
+    try:
+        _download_file(url, safetensors_path, timeout_s=120)
+        return True, "downloaded"
+    except Exception as exc:
+        return False, f"download_failed: {exc}"
+
+
 # ── Cached model loaders ──────────────────────────────────────────────────────
 
 @st.cache_resource(show_spinner="Loading BERT classifier…")
@@ -233,6 +285,11 @@ def load_bert_classifier():
     if not model_path.is_dir() or not le_path.is_file():
         return None, None, None
     try:
+        ok, status = _ensure_bert_weights_present()
+        if not ok:
+            st.warning(f"BERT weights unavailable ({status}). Falling back to rule-based classifier.")
+            return None, None, None
+
         from transformers import DistilBertTokenizer, DistilBertForSequenceClassification
         import torch
         # Force offline/local loading to prevent slow/hanging hub calls on some systems
