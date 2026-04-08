@@ -841,7 +841,7 @@ if page == "🔍 CVE Analyzer":
     cvss_score = cvss_input if cvss_input > 0.0 else None
 
     analyze_clicked = st.button(
-        "Analyze Vulnerability", type="primary", use_container_width=True
+        "Analyze Vulnerability", type="primary", width="stretch"
     )
 
     if analyze_clicked:
@@ -1209,7 +1209,7 @@ elif page == "🔎 Similar CVE Search":
 
     num_results = st.slider("Number of results", min_value=1, max_value=10, value=5)
 
-    if st.button("Find Similar CVEs", type="primary", use_container_width=True):
+    if st.button("Find Similar CVEs", type="primary", width="stretch"):
         if not query.strip():
             st.warning("Please enter a vulnerability description.")
         elif df.empty:
@@ -1344,7 +1344,7 @@ elif page == "🎯 Attack Surface Scanner":
         )
 
     scan_clicked = st.button(
-        "🔍 Scan My Attack Surface", type="primary", use_container_width=True
+        "🔍 Scan My Attack Surface", type="primary", width="stretch"
     )
 
     if scan_clicked:
@@ -1532,7 +1532,7 @@ elif page == "🎯 Attack Surface Scanner":
                     data=csv_bytes,
                     file_name=f"patch_queue_{datetime.now().strftime('%Y%m%d_%H%M')}.csv",
                     mime="text/csv",
-                    use_container_width=True,
+                    width="stretch",
                 )
 
 elif page == "📈 Training Insights":
@@ -1573,7 +1573,7 @@ elif page == "📈 Training Insights":
                     data=f,
                     file_name="per_sample_rouge.csv",
                     mime="text/csv",
-                    use_container_width=True,
+                    width="stretch",
                 )
     else:
         st.warning(
@@ -1631,7 +1631,7 @@ elif page == "📈 Training Insights":
                     data=f,
                     file_name="predictions.csv",
                     mime="text/csv",
-                    use_container_width=True,
+                    width="stretch",
                 )
     else:
         st.warning(
