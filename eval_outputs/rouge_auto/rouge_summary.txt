@@ -1,0 +1,7 @@
+Rows_scored: 100
+ROUGE-1_F1 (keyword): 0.8097
+ROUGE-2_F1 (phrase):  0.7832
+ROUGE-L_F1 (struct):  0.7882
+Candidate_col: Summary
+Reference_col: Reference_Summary
+Mode: summary

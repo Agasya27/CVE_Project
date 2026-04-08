@@ -16,6 +16,7 @@ Run:
 import re
 import sys
 import time
+import os
 import joblib
 import requests
 import numpy as np
@@ -28,6 +29,9 @@ from pathlib import Path
 # ── Project root on sys.path ──────────────────────────────────────────────────
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
+
+# Avoid tokenizers thread contention noise/hangs in some environments
+os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 
 from utils.preprocessing import (
     classify_vulnerability_type,
@@ -195,6 +199,25 @@ def _embeddings_available() -> bool:
     return (MODELS_DIR / "cve_embeddings.npy").is_file()
 
 
+def _is_git_lfs_pointer(path: Path) -> bool:
+    """
+    Detect Git LFS pointer files.
+
+    On some deploy targets (e.g. Streamlit Cloud), Git LFS objects may not be
+    downloaded; in that case the file exists but contains a small text pointer.
+    """
+    try:
+        if not path.is_file():
+            return False
+        # Typical pointer is ~130 bytes; avoid reading large files.
+        if path.stat().st_size > 2048:
+            return False
+        head = path.read_text(encoding="utf-8", errors="ignore")
+        return "git-lfs.github.com/spec" in head and head.startswith("version ")
+    except Exception:
+        return False
+
+
 # ── Cached model loaders ──────────────────────────────────────────────────────
 
 @st.cache_resource(show_spinner="Loading BERT classifier…")
@@ -212,8 +235,9 @@ def load_bert_classifier():
     try:
         from transformers import DistilBertTokenizer, DistilBertForSequenceClassification
         import torch
-        tokenizer     = DistilBertTokenizer.from_pretrained(str(model_path))
-        model         = DistilBertForSequenceClassification.from_pretrained(str(model_path))
+        # Force offline/local loading to prevent slow/hanging hub calls on some systems
+        tokenizer     = DistilBertTokenizer.from_pretrained(str(model_path), local_files_only=True)
+        model         = DistilBertForSequenceClassification.from_pretrained(str(model_path), local_files_only=True)
         model.eval()
         label_encoder = joblib.load(le_path)
         return model, tokenizer, label_encoder
@@ -400,6 +424,13 @@ for name, ready in [
         f'<span class="status-dot {dot}"></span>'
         f'{name} — <em>{label}</em></div>',
         unsafe_allow_html=True,
+    )
+
+_bert_file = MODELS_DIR / "bert_classifier" / "model.safetensors"
+if _is_git_lfs_pointer(_bert_file):
+    st.sidebar.warning(
+        "BERT model file looks like a Git LFS pointer (weights not downloaded). "
+        "If deployed, ensure Git LFS files are included or replace LFS with a runtime download."
     )
 
 st.sidebar.markdown("---")
@@ -1546,8 +1577,8 @@ elif page == "📈 Training Insights":
                 )
     else:
         st.warning(
-            "ROUGE outputs not found. Run `python3 -m eval.compute_rouge ...` first "
-            "to generate `eval_outputs/rouge_auto/rouge_summary.txt`."
+            "ROUGE outputs not found in `eval_outputs/rouge_auto/`. "
+            "If this is a fresh deploy, ensure `eval_outputs/` is committed to the repo."
         )
 
     st.markdown(
@@ -1604,8 +1635,8 @@ elif page == "📈 Training Insights":
                 )
     else:
         st.warning(
-            "Confusion matrix outputs not found. Run `python3 -m eval.compute_confusion_matrices` first "
-            "to generate `eval_outputs/confusion_matrices/`."
+            "Confusion matrix outputs not found in `eval_outputs/confusion_matrices/`. "
+            "If this is a fresh deploy, ensure `eval_outputs/` is committed to the repo."
         )
 
 

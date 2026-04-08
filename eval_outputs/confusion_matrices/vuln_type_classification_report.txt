@@ -1,0 +1,19 @@
+                            precision    recall  f1-score   support
+
+     Authentication Bypass       0.65      1.00      0.79        22
+           Buffer Overflow       1.00      1.00      1.00        33
+                      CSRF       1.00      0.70      0.82        10
+         Command Injection       1.00      0.89      0.94         9
+Cross-Site Scripting (XSS)       1.00      1.00      1.00        46
+         Denial of Service       1.00      1.00      1.00        42
+    Information Disclosure       0.95      1.00      0.97        19
+                     Other       1.00      0.92      0.96       108
+            Path Traversal       1.00      1.00      1.00        22
+      Privilege Escalation       1.00      1.00      1.00        15
+     Remote Code Execution       1.00      1.00      1.00        53
+             SQL Injection       1.00      1.00      1.00        68
+                      SSRF       1.00      1.00      1.00        16
+
+                  accuracy                           0.97       463
+                 macro avg       0.97      0.96      0.96       463
+              weighted avg       0.98      0.97      0.97       463

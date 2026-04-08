@@ -25,6 +25,6 @@ Thumbs.db
 .streamlit/secrets.toml
 
 # Evaluation outputs / annotation artifacts
-eval_outputs/
+# Keep human annotation file local by default
 data/cve_references.csv
 data/cve_references_auto.csv

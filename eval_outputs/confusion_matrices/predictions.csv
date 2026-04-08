@@ -1,0 +1,927 @@
+task,y_true,y_pred
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Command Injection,Command Injection
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Other,Other
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Other,Other
+vuln_type,Other,Other
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Other,Other
+vuln_type,Other,Other
+vuln_type,Path Traversal,Path Traversal
+vuln_type,Path Traversal,Path Traversal
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,SQL Injection,SQL Injection
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Denial of Service,Denial of Service
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Other,Other
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Other,Other
+vuln_type,Other,Other
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Path Traversal,Path Traversal
+vuln_type,Other,Other
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Other,Other
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Other,Other
+vuln_type,Privilege Escalation,Privilege Escalation
+vuln_type,Other,Other
+vuln_type,Other,Other
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Other,Other
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Other,Authentication Bypass
+vuln_type,Other,Authentication Bypass
+vuln_type,Information Disclosure,Information Disclosure
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Other,Other
+vuln_type,Other,Other
+vuln_type,SSRF,SSRF
+vuln_type,CSRF,Authentication Bypass
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Privilege Escalation,Privilege Escalation
+vuln_type,Authentication Bypass,Authentication Bypass
+vuln_type,Information Disclosure,Information Disclosure
+vuln_type,Path Traversal,Path Traversal
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Denial of Service,Denial of Service
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Other,Other
+vuln_type,SSRF,SSRF
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Other,Other
+vuln_type,SQL Injection,SQL Injection
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Path Traversal,Path Traversal
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Command Injection,Command Injection
+vuln_type,Other,Authentication Bypass
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Privilege Escalation,Privilege Escalation
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,SQL Injection,SQL Injection
+vuln_type,SSRF,SSRF
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Privilege Escalation,Privilege Escalation
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Command Injection,Command Injection
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,SQL Injection,SQL Injection
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Other,Other
+vuln_type,Path Traversal,Path Traversal
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Other,Authentication Bypass
+vuln_type,SSRF,SSRF
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Other,Other
+vuln_type,Information Disclosure,Information Disclosure
+vuln_type,SQL Injection,SQL Injection
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Information Disclosure,Information Disclosure
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,SSRF,SSRF
+vuln_type,Other,Information Disclosure
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Other,Other
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Other,Other
+vuln_type,Other,Other
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Other,Other
+vuln_type,Other,Other
+vuln_type,SQL Injection,SQL Injection
+vuln_type,CSRF,CSRF
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Denial of Service,Denial of Service
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Other,Other
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Other,Other
+vuln_type,Other,Other
+vuln_type,SQL Injection,SQL Injection
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Authentication Bypass,Authentication Bypass
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Other,Other
+vuln_type,Other,Other
+vuln_type,Other,Other
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Other,Other
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Other,Other
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Authentication Bypass,Authentication Bypass
+vuln_type,SSRF,SSRF
+vuln_type,SQL Injection,SQL Injection
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Other,Other
+vuln_type,Authentication Bypass,Authentication Bypass
+vuln_type,Path Traversal,Path Traversal
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Information Disclosure,Information Disclosure
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Other,Other
+vuln_type,Other,Other
+vuln_type,Path Traversal,Path Traversal
+vuln_type,Path Traversal,Path Traversal
+vuln_type,Path Traversal,Path Traversal
+vuln_type,Other,Other
+vuln_type,CSRF,CSRF
+vuln_type,Other,Other
+vuln_type,Other,Other
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Other,Other
+vuln_type,Other,Other
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Other,Authentication Bypass
+vuln_type,Other,Other
+vuln_type,SSRF,SSRF
+vuln_type,Authentication Bypass,Authentication Bypass
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Other,Other
+vuln_type,SSRF,SSRF
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Information Disclosure,Information Disclosure
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,SSRF,SSRF
+vuln_type,Other,Other
+vuln_type,SQL Injection,SQL Injection
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Other,Authentication Bypass
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Other,Other
+vuln_type,Other,Other
+vuln_type,Other,Other
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Authentication Bypass,Authentication Bypass
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Privilege Escalation,Privilege Escalation
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Other,Other
+vuln_type,Other,Other
+vuln_type,CSRF,CSRF
+vuln_type,Other,Other
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Other,Other
+vuln_type,Other,Other
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Information Disclosure,Information Disclosure
+vuln_type,Other,Other
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Other,Other
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Information Disclosure,Information Disclosure
+vuln_type,Other,Authentication Bypass
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Privilege Escalation,Privilege Escalation
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,SSRF,SSRF
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Other,Other
+vuln_type,SSRF,SSRF
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Authentication Bypass,Authentication Bypass
+vuln_type,SSRF,SSRF
+vuln_type,Denial of Service,Denial of Service
+vuln_type,SSRF,SSRF
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Information Disclosure,Information Disclosure
+vuln_type,Information Disclosure,Information Disclosure
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Path Traversal,Path Traversal
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Path Traversal,Path Traversal
+vuln_type,Information Disclosure,Information Disclosure
+vuln_type,Path Traversal,Path Traversal
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Other,Other
+vuln_type,Other,Other
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Other,Other
+vuln_type,Information Disclosure,Information Disclosure
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Command Injection,Command Injection
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Path Traversal,Path Traversal
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Path Traversal,Path Traversal
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Other,Other
+vuln_type,Path Traversal,Path Traversal
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Other,Other
+vuln_type,SQL Injection,SQL Injection
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Other,Other
+vuln_type,SSRF,SSRF
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Path Traversal,Path Traversal
+vuln_type,Other,Other
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Authentication Bypass,Authentication Bypass
+vuln_type,Other,Other
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Path Traversal,Path Traversal
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Information Disclosure,Information Disclosure
+vuln_type,Command Injection,Command Injection
+vuln_type,Privilege Escalation,Privilege Escalation
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Other,Other
+vuln_type,Path Traversal,Path Traversal
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Other,Other
+vuln_type,Command Injection,Command Injection
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Information Disclosure,Information Disclosure
+vuln_type,Other,Other
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,SQL Injection,SQL Injection
+vuln_type,CSRF,Authentication Bypass
+vuln_type,Authentication Bypass,Authentication Bypass
+vuln_type,Authentication Bypass,Authentication Bypass
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Denial of Service,Denial of Service
+vuln_type,CSRF,CSRF
+vuln_type,Other,Other
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Other,Other
+vuln_type,Other,Other
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Other,Other
+vuln_type,Path Traversal,Path Traversal
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Privilege Escalation,Privilege Escalation
+vuln_type,Authentication Bypass,Authentication Bypass
+vuln_type,Other,Other
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Other,Other
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,SQL Injection,SQL Injection
+vuln_type,SQL Injection,SQL Injection
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Other,Other
+vuln_type,SSRF,SSRF
+vuln_type,Authentication Bypass,Authentication Bypass
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Privilege Escalation,Privilege Escalation
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,CSRF,CSRF
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Command Injection,Authentication Bypass
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,CSRF,CSRF
+vuln_type,Authentication Bypass,Authentication Bypass
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Denial of Service,Denial of Service
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Authentication Bypass,Authentication Bypass
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Other,Other
+vuln_type,Information Disclosure,Information Disclosure
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Other,Other
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Other,Other
+vuln_type,Authentication Bypass,Authentication Bypass
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Authentication Bypass,Authentication Bypass
+vuln_type,Authentication Bypass,Authentication Bypass
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Other,Other
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Privilege Escalation,Privilege Escalation
+vuln_type,Other,Other
+vuln_type,Authentication Bypass,Authentication Bypass
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Other,Other
+vuln_type,Other,Authentication Bypass
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Information Disclosure,Information Disclosure
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Privilege Escalation,Privilege Escalation
+vuln_type,Other,Other
+vuln_type,Other,Other
+vuln_type,Other,Other
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Other,Other
+vuln_type,Other,Other
+vuln_type,Privilege Escalation,Privilege Escalation
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,SSRF,SSRF
+vuln_type,SQL Injection,SQL Injection
+vuln_type,CSRF,CSRF
+vuln_type,Other,Other
+vuln_type,Other,Other
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Information Disclosure,Information Disclosure
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,CSRF,Authentication Bypass
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Authentication Bypass,Authentication Bypass
+vuln_type,Other,Other
+vuln_type,Path Traversal,Path Traversal
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,Other,Other
+vuln_type,Command Injection,Command Injection
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Command Injection,Command Injection
+vuln_type,Information Disclosure,Information Disclosure
+vuln_type,Other,Other
+vuln_type,SQL Injection,SQL Injection
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Privilege Escalation,Privilege Escalation
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Information Disclosure,Information Disclosure
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Authentication Bypass,Authentication Bypass
+vuln_type,Other,Other
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Other,Other
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Other,Other
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Path Traversal,Path Traversal
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Other,Other
+vuln_type,Other,Other
+vuln_type,Privilege Escalation,Privilege Escalation
+vuln_type,Other,Other
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,Remote Code Execution,Remote Code Execution
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Cross-Site Scripting (XSS),Cross-Site Scripting (XSS)
+vuln_type,SQL Injection,SQL Injection
+vuln_type,Buffer Overflow,Buffer Overflow
+vuln_type,Privilege Escalation,Privilege Escalation
+vuln_type,Other,Other
+vuln_type,Other,Other
+vuln_type,Authentication Bypass,Authentication Bypass
+vuln_type,Denial of Service,Denial of Service
+vuln_type,Authentication Bypass,Authentication Bypass
+vuln_type,Other,Other
+vuln_type,Other,Other
+severity,Medium,Medium
+severity,High,Critical
+severity,Medium,Medium
+severity,High,Medium
+severity,High,Critical
+severity,Medium,Medium
+severity,Critical,Critical
+severity,Critical,Critical
+severity,Medium,High
+severity,High,High
+severity,High,High
+severity,Medium,Critical
+severity,High,High
+severity,Low,Low
+severity,Medium,Medium
+severity,Medium,Medium
+severity,Medium,Medium
+severity,High,High
+severity,Medium,Medium
+severity,Medium,High
+severity,High,High
+severity,Medium,Critical
+severity,Critical,Critical
+severity,Medium,Medium
+severity,High,Medium
+severity,High,High
+severity,High,High
+severity,High,High
+severity,Low,Low
+severity,High,High
+severity,Medium,Medium
+severity,High,High
+severity,Medium,Medium
+severity,High,High
+severity,Low,Low
+severity,High,High
+severity,High,High
+severity,High,Critical
+severity,Medium,Medium
+severity,High,High
+severity,High,High
+severity,High,Critical
+severity,High,High
+severity,High,Medium
+severity,Medium,Medium
+severity,Low,Medium
+severity,High,High
+severity,High,High
+severity,Critical,Critical
+severity,High,Critical
+severity,High,High
+severity,Medium,Medium
+severity,High,High
+severity,Medium,Medium
+severity,Medium,Medium
+severity,Critical,Critical
+severity,High,Medium
+severity,Medium,Critical
+severity,Medium,Low
+severity,Medium,Medium
+severity,High,High
+severity,Medium,Medium
+severity,High,High
+severity,High,High
+severity,Medium,Medium
+severity,Medium,Medium
+severity,Medium,Medium
+severity,Low,Low
+severity,Medium,Medium
+severity,Medium,Medium
+severity,Medium,Medium
+severity,High,Medium
+severity,High,Critical
+severity,High,High
+severity,Critical,Critical
+severity,High,High
+severity,Medium,Medium
+severity,Medium,High
+severity,Medium,Medium
+severity,Medium,Medium
+severity,Medium,Medium
+severity,Medium,Medium
+severity,Medium,Medium
+severity,Critical,Critical
+severity,High,Critical
+severity,Medium,Medium
+severity,High,High
+severity,Medium,Medium
+severity,Medium,Medium
+severity,High,High
+severity,Critical,High
+severity,High,High
+severity,High,High
+severity,Medium,Critical
+severity,High,High
+severity,High,Medium
+severity,High,High
+severity,Medium,High
+severity,Medium,Low
+severity,High,High
+severity,High,High
+severity,Medium,Medium
+severity,Medium,High
+severity,High,Low
+severity,Medium,Medium
+severity,Critical,Critical
+severity,Medium,Medium
+severity,Medium,Medium
+severity,High,High
+severity,Medium,Medium
+severity,High,High
+severity,High,High
+severity,Medium,Medium
+severity,Medium,Medium
+severity,High,High
+severity,Critical,Critical
+severity,Low,High
+severity,High,High
+severity,Medium,Medium
+severity,Medium,Medium
+severity,Critical,Critical
+severity,High,High
+severity,High,High
+severity,Medium,Critical
+severity,Critical,Critical
+severity,Medium,High
+severity,High,High
+severity,Medium,Medium
+severity,High,Critical
+severity,Critical,High
+severity,High,High
+severity,Low,Low
+severity,Medium,Medium
+severity,Medium,Medium
+severity,Critical,Critical
+severity,High,Critical
+severity,High,Medium
+severity,Medium,High
+severity,Medium,Medium
+severity,High,Critical
+severity,High,High
+severity,High,High
+severity,Medium,Medium
+severity,Critical,Critical
+severity,High,Critical
+severity,High,High
+severity,Medium,Medium
+severity,High,Medium
+severity,Medium,Medium
+severity,Medium,Medium
+severity,High,Medium
+severity,Critical,Critical
+severity,Medium,High
+severity,Medium,Critical
+severity,Medium,Medium
+severity,High,High
+severity,Critical,High
+severity,Low,Low
+severity,Medium,Medium
+severity,High,High
+severity,Medium,Medium
+severity,High,High
+severity,High,High
+severity,Medium,Medium
+severity,Medium,Medium
+severity,Medium,Medium
+severity,High,High
+severity,Critical,High
+severity,High,High
+severity,High,High
+severity,Critical,High
+severity,Medium,Medium
+severity,Critical,Critical
+severity,High,Medium
+severity,High,High
+severity,Medium,High
+severity,High,Critical
+severity,Low,Low
+severity,High,High
+severity,Medium,Medium
+severity,Critical,Critical
+severity,High,High
+severity,High,High
+severity,Low,Low
+severity,Medium,Low
+severity,High,Medium
+severity,High,High
+severity,High,High
+severity,Medium,High
+severity,High,High
+severity,Medium,Critical
+severity,Medium,Critical
+severity,High,High
+severity,Critical,High
+severity,High,High
+severity,High,Medium
+severity,High,Medium
+severity,High,High
+severity,Medium,Critical
+severity,Critical,Critical
+severity,High,Medium
+severity,High,High
+severity,Medium,Medium
+severity,Medium,Medium
+severity,High,Critical
+severity,High,Medium
+severity,Critical,Critical
+severity,High,High
+severity,Critical,Critical
+severity,Critical,High
+severity,High,High
+severity,High,Critical
+severity,Medium,Critical
+severity,High,High
+severity,Medium,Medium
+severity,Medium,Medium
+severity,High,Low
+severity,High,High
+severity,Medium,Medium
+severity,Medium,High
+severity,Critical,High
+severity,Medium,Medium
+severity,High,High
+severity,Medium,Medium
+severity,High,Critical
+severity,Low,Low
+severity,High,High
+severity,Medium,High
+severity,Medium,Medium
+severity,High,High
+severity,Medium,Medium
+severity,Medium,Critical
+severity,High,High
+severity,High,High
+severity,Medium,High
+severity,High,High
+severity,High,High
+severity,Critical,Critical
+severity,Medium,Medium
+severity,High,High
+severity,Medium,Medium
+severity,High,High
+severity,High,High
+severity,High,High
+severity,High,High
+severity,Critical,Medium
+severity,Critical,Critical
+severity,Medium,Medium
+severity,Medium,Medium
+severity,High,Medium
+severity,Medium,Medium
+severity,High,High
+severity,Medium,Critical
+severity,Medium,Medium
+severity,High,High
+severity,High,High
+severity,Critical,High
+severity,High,High
+severity,Low,High
+severity,High,Medium
+severity,Low,Low
+severity,High,High
+severity,High,Medium
+severity,Medium,Medium
+severity,High,High
+severity,Critical,Critical
+severity,Medium,Medium
+severity,Medium,Medium
+severity,Medium,Medium
+severity,High,Medium
+severity,Medium,Medium
+severity,Low,Low
+severity,Medium,Medium
+severity,Medium,Medium
+severity,Medium,Critical
+severity,High,High
+severity,Medium,Medium
+severity,Medium,Medium
+severity,High,High
+severity,Medium,Medium
+severity,Medium,Medium
+severity,Medium,Medium
+severity,High,High
+severity,High,High
+severity,Medium,Medium
+severity,High,High
+severity,Medium,Medium
+severity,Critical,Medium
+severity,Critical,High
+severity,High,High
+severity,Medium,Medium
+severity,Medium,Medium
+severity,High,High
+severity,Medium,Medium
+severity,High,High
+severity,High,High
+severity,Medium,Critical
+severity,Medium,Low
+severity,Medium,Critical
+severity,High,Critical
+severity,Medium,Medium
+severity,High,Medium
+severity,High,High
+severity,High,High
+severity,Medium,Medium
+severity,High,High
+severity,High,Medium
+severity,High,Critical
+severity,Medium,High
+severity,Critical,High
+severity,Critical,Critical
+severity,Critical,Critical
+severity,Medium,Medium
+severity,High,Low
+severity,High,Critical
+severity,High,Critical
+severity,Medium,Medium
+severity,High,High
+severity,Low,Medium
+severity,Critical,Critical
+severity,High,High
+severity,Medium,Medium
+severity,Medium,Medium
+severity,Medium,Medium
+severity,Critical,Critical
+severity,High,Medium
+severity,High,Critical
+severity,High,High
+severity,High,High
+severity,Medium,High
+severity,Medium,High
+severity,Medium,Medium
+severity,Critical,Critical
+severity,High,Medium
+severity,Medium,Medium
+severity,Critical,Critical
+severity,Critical,Critical
+severity,Medium,Medium
+severity,Critical,Medium
+severity,Critical,Critical
+severity,High,Medium
+severity,High,Medium
+severity,Medium,High
+severity,Critical,Critical
+severity,Critical,Critical
+severity,High,High
+severity,High,High
+severity,Medium,Medium
+severity,Medium,Critical
+severity,Critical,Critical
+severity,Medium,Medium
+severity,Critical,Critical
+severity,High,High
+severity,High,High
+severity,Medium,Medium
+severity,High,Critical
+severity,High,High
+severity,High,High
+severity,Low,Low
+severity,High,High
+severity,High,High
+severity,Critical,Critical
+severity,Medium,High
+severity,Medium,Medium
+severity,Critical,Medium
+severity,Critical,Critical
+severity,High,High
+severity,High,High
+severity,High,High
+severity,High,High
+severity,Medium,Medium
+severity,High,High
+severity,High,High
+severity,High,High
+severity,Medium,Critical
+severity,High,Medium
+severity,Critical,Critical
+severity,Medium,Critical
+severity,Low,Medium
+severity,High,Critical
+severity,Medium,Medium
+severity,High,High
+severity,Medium,Medium
+severity,Medium,Medium
+severity,Medium,Medium
+severity,High,High
+severity,High,High
+severity,High,High
+severity,High,Medium
+severity,High,High
+severity,Low,Critical
+severity,Medium,High
+severity,High,High
+severity,Medium,Medium
+severity,Critical,Critical
+severity,Medium,Medium
+severity,Medium,Medium
+severity,High,Medium
+severity,Medium,Medium
+severity,Critical,Critical
+severity,High,High
+severity,Medium,Medium
+severity,Medium,High
+severity,High,High
+severity,High,Low
+severity,High,Medium
+severity,High,High
+severity,High,Medium
+severity,Medium,Medium
+severity,High,Medium
+severity,Critical,Critical
+severity,High,High
+severity,Medium,Medium
+severity,Critical,Critical
+severity,High,High
+severity,Medium,Medium
+severity,Medium,High
+severity,High,Critical
+severity,High,High
+severity,High,Critical
+severity,High,High
+severity,High,High
+severity,High,High
+severity,Medium,Medium
+severity,Medium,Medium
+severity,Medium,Medium
+severity,High,High
+severity,High,Medium
+severity,Medium,Medium
+severity,Medium,Medium
+severity,Critical,Critical
+severity,High,Medium
+severity,Medium,Medium
+severity,Medium,High
+severity,High,High
+severity,High,High
+severity,High,High
+severity,High,High
+severity,High,Critical
+severity,Medium,Critical
+severity,High,Low
+severity,Medium,Medium
+severity,Critical,Critical
+severity,High,Low
+severity,High,Medium
+severity,Medium,Medium
+severity,High,Medium
+severity,High,High
+severity,Medium,Medium
+severity,Medium,Medium
+severity,High,High
+severity,High,High
+severity,High,High
+severity,Medium,High
+severity,Critical,High
+severity,Medium,Medium
+severity,Low,Low
+severity,High,Critical
+severity,Critical,Critical
+severity,High,Medium
+severity,Critical,Critical
+severity,High,High
+severity,High,High
